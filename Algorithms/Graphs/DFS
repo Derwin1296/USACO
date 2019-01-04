@@ -1,13 +1,29 @@
-void dfs(int vertex){
-  if(vis[vertex]){
-    return;
-  }
-  process(vertex);
-  vis[vertex] = true;
-  vector<int> n = adjList[vertex];
-  for(auto adjV : n){
-    if(!vis[adjV]){
-      dfs(adjV);
+Check whether it is possible to color a graph in two colors such that no two adjacent vertices share the same color
+
+bool splitPartition(int c, int vertex){// odd = 1, even = 2
+    // cout << "Current vertex: " << vertex + 1 << " Current color " << c << "\n";
+    if(color[vertex] != 0){
+        // cout << (color[vertex] == c) << "\n";
+        return color[vertex] == c;
     }
-  }
+    else{
+        bool stillValid = true;
+        // Color this vertex, visit neighbors
+        color[vertex] = c;
+        OE[c - 1] ++;
+        vi n = adjList[vertex];
+        for(auto v : n){
+            if(vertex == 2){
+                // cout << "Current vertex: " <<  v << "\n";
+            }
+            stillValid = splitPartition(3 - c, v);
+            if(!stillValid){
+                // cout << "Careful!" << " ";
+                // cout << "Current vertex: " << vertex + 1 << " Current color " << c << "\n";
+                return false;
+            }
+        }
+        // cout << "Still valid: " << stillValid << "\n";
+        return true;
+    }
 }
