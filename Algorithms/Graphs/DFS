@@ -1,0 +1,13 @@
+void dfs(int vertex){
+  if(vis[vertex]){
+    return;
+  }
+  process(vertex);
+  vis[vertex] = true;
+  vector<int> n = adjList[vertex];
+  for(auto adjV : n){
+    if(!vis[adjV]){
+      dfs(adjV);
+    }
+  }
+}
