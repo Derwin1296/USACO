@@ -35,82 +35,76 @@ typedef vector<cd> vcd;
 const int MOD = 1000000007;
 const ll INF = 1e18;
 const int MX = 100001;
-ll grid[510][510];
-bool waypoint[510][510];
-pi entryPoint;
-bool vis[510][510];
-
-int xDir[4] = {1, -1, 0, 0};
-int yDir[4] = {0, 0, -1, 1};
-// in bounds
-bool inBounds(int x, int y, int m, int n){
-    return x >= 0 && x < m && y >= 0 && y < n;
-}
-// bfs
-void bfs(pi point, int m, int n, int d){
-    int xCoor = point.f; int yCoor = point.s;
-    for(int i = 0; i < m; i++){
-        for(int j = 0; j < n; j++){
-            vis[i][j] = false;
-        }
+struct interval{
+  int sTime;
+  int eTime;
+  interval(int a, int b){
+      sTime = a;
+      eTime = b;
+  }
+  bool operator<(const interval& d)const{
+    if(d.eTime != eTime){
+        return eTime < d.eTime;
     }
-    queue<pi> q;
-    q.push({xCoor, yCoor});
-    while(!q.empty()){
-        pi cPair = q.front();
-        q.pop();
-        int curX = cPair.f; int curY = cPair.s;
-        
-        vis[curX][curY] = true;
-        for(int i = 0; i < 4; i++){
-            int newX = curX + xDir[i];
-            int newY = curY + yDir[i];
-            if(inBounds(newX, newY, m, n) && !vis[newX][newY] && abs(grid[newX][newY] - grid[curX][curY]) <= d){
-                vis[newX][newY] = true;
-                q.push({newX, newY});
+    else{
+        return sTime < d.sTime;
+    }
+  }
+  void setStart(int c){
+      sTime = c;
+  }
+  void setEnd(int c){
+      eTime = c;
+  }
+};
+vector<interval> orderedInt;
+// Find # of max programs
+int solve(){
+    int progUsed = 0;
+    int first = 0;
+    int second = 0;
+    int pointer = 0;
+    while(pointer < orderedInt.size()){
+        interval toProcess = orderedInt[pointer];
+        // Usable by first, but not second
+        if(toProcess.sTime >= first && toProcess.sTime < second){
+            first = toProcess.eTime;
+            progUsed ++;
+        }
+        // Usable by second, not usable by first
+        else if(toProcess.sTime >= second && toProcess.sTime < first){
+            second = toProcess.eTime;
+            progUsed ++;
+        }
+        // Usable by both
+        else if(toProcess.sTime >= second && toProcess.sTime >= first){
+            progUsed ++;
+            // Choose one with higher end time
+            if(second >= first){
+                second = toProcess.eTime;
+            }
+            else{
+                first = toProcess.eTime;
             }
         }
+        pointer++;
     }
-}
-// waypoints all true
-bool allWayPoints(int m, int n, vector<pi> toCheck){
-    for(int i = 0; i < toCheck.size(); i++){
-        pi cPair = toCheck[i];
-        if(!vis[cPair.f][cPair.s]){
-            return false;
-        }
-    }
-    return true;
+    return progUsed;
 }
 int main() {
-    vector<pi> wayPoints;
-    int M, N; cin >> M >> N;
-    F0R(i, M){
-        F0R(j, N){
-            cin >> grid[i][j];
-        }
+    freopen("recording.in", "r", stdin);
+    freopen("recording.out", "w", stdout);
+    int n; cin >> n;
+    F0R(i, n){
+        int a, b;
+        cin >> a >> b;
+        orderedInt.pb(interval(a, b));
     }
-    F0R(i, M){
-        F0R(j, N){
-            int x; cin >> x;
-            if(x == 1){
-                waypoint[i][j] = true;
-                entryPoint = {i, j};
-                wayPoints.pb({i, j});
-            }
-        }
-    }
-    ll low = 0; ll high = 1e9;
-    while(low < high){
-        ll mid = (low + high) / 2;
-        bfs(entryPoint, M, N, mid);
-        bool valid = allWayPoints(M, N, wayPoints);
-        if(valid){
-            high = mid;
-        }
-        else{
-            low = mid + 1;
-        }
-    }
-    cout << low;
+    sort(orderedInt.begin(), orderedInt.end());
+    int ans = solve();
+    cout << ans;
+    // for(int i = 0; i < orderedInt.size(); i++){
+    //     interval a = orderedInt[i];
+    //     cout << a.eTime << ", " << a.sTime << "\n";
+    // }
 }
