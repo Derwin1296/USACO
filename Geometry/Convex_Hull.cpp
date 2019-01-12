@@ -1,11 +1,3 @@
-bool operator<(pl a, pl b){ // Sorts by x, then y
-    if(a.f != b.f){
-        return a.f < b.f;
-    }
-    else{
-        return a.s < b.s;
-    }
-}
 int ori(pl a, pl b, pl c){// Returns orientation of points
     int eq = (b.s - a.s) * (c.f - b.f) - (c.s - b.s) * (b.f - a.f);
     if(eq < 0){
@@ -52,8 +44,6 @@ vector<pl> chull(pl list[MX], bool upper, int n){
 }
 
 int main() {
-    // freopen("curling.in", "r", stdin);
-    // freopen("curling.out", "w", stdout);
     int n;
     cin >> n;
     pl A[n]; pl B[n];
@@ -62,11 +52,6 @@ int main() {
         cin >> x >> y;
         A[i] = {x, y};
     }
-    // F0R(i, n){
-    //     int x, y;
-    //     cin >> x >> y;
-    //     B[i] = {x, y};
-    // }
     sort(A, A + n);
     sort(B, B + n);
     vector<pl> newHull = chull(A, false, n);
@@ -83,8 +68,4 @@ int main() {
     for(int i = 0; i < combo.size(); i++){
         cout << newHull[i].f << ", " << newHull[i].s << "\n";
     }
-    // cout << "\n";
-    // for(int i = 0; i < newHull2.size(); i++){
-    //     cout << newHull2[i].f << ", " << newHull2[i].s << "\n";
-    // }
 }
