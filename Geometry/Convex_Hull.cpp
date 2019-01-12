@@ -53,18 +53,16 @@ int main() {
         A[i] = {x, y};
     }
     sort(A, A + n);
-    sort(B, B + n);
     vector<pl> newHull = chull(A, false, n);
     vector<pl> newHull2 = chull(A, true, n);
+    
     newHull.resize(newHull.size() - 1);
     newHull2.resize(newHull2.size() - 1);
     vector<pl> combo;
-    for(int i = 0; i < newHull.size(); i++){
-        combo.pb(newHull[i]);
-    }
-    for(int i = 0; i < newHull2.size(); i++){
-        combo.pb(newHull2[i]);
-    }
+    
+    combo.insert(combo.end(), newHull.begin(), newHull.end());
+    combo.insert(combo.end(), newHull.begin(), newHull.end());
+    
     for(int i = 0; i < combo.size(); i++){
         cout << newHull[i].f << ", " << newHull[i].s << "\n";
     }
