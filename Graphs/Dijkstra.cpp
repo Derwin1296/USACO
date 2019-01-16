@@ -1,25 +1,26 @@
-for(int i = 1; i <= n; i++) d[i] = INF;
-d[root] = 0;
-
-void dijkstra(int root){
-  std :: priority_queue<pi> q;
-  q.push({root, 0});
-  
-  while(!q.empty()){
-    pi cPair = q.front();
-    q.pop();
-    
-    int v = cPair.f; int dist = cPair.s;
-    if(vis[v]) continue;
-    vis[v] = true;
-    
-    vector<pi> n = adjList[v];
-    for(auto p : n){
-        int vertex = p.f; int weight = p.s;
-        if(d[v] + weight < d[vertex]){
-            d[vertex] = d[v] + weight;
-            q.push({-d[vertex], vertex);
+// Shortest Path with Heap
+void dijkstra(int vertex){
+    set<pair<ll, int>> toProcess;
+    toProcess.insert({0, vertex});
+    dist[0] = 0;
+    while(!toProcess.empty()){
+        pair<ll, int> p = *toProcess.begin();
+        ll curDist = p.f;
+        int curV = p.s;
+        // Relax vertex, visit neighbors
+        toProcess.erase(toProcess.begin());
+        vis[curV] = true;
+        vector<pair<ll, int>> n = adjList[curV];
+        for(int i = 0; i < n.size(); i++){
+            pair<ll, int> data = n[i];
+            int adjV = data.s; ll d = adjMatrix[adjV][curV];
+            if(!vis[adjV]){
+                if(curDist + d < dist[adjV]){
+                    dist[adjV] = curDist + d;
+                    parent[adjV] = curV;
+                    toProcess.insert({dist[adjV], adjV});
+                }
+            }
         }
     }
-  }
 }
