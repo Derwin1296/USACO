@@ -1,4 +1,4 @@
-// Generate all possible subsets of a set
+// Generate all possible subsets of a set of n integers
 vector<vector<int>> genSub(vector<int> list){
     vector<vector<int>> fSet;
     // All #s up to 2^(# elements in the set)
