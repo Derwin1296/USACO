@@ -1,24 +1,28 @@
 struct BIT{
-    int tree[MX + 10];
-    int size;
-    // Creates tree with given size
-    BIT(int n){
+   int tree[1000] = {0};
+   int size;
+   BIT(int arr[], int n){
         size = n + 1;
-    }
-    // Updates tree
-    void update(int k, int x){// k = index, x = value
-        while(k <= size){
-            tree[k] += x;
-            k += (k & -k);
+        for(int i = 0; i < n; i++){
+            update(arr[i], i);
+            // cout << "Done updating! \n";
         }
-    }
-    // Find sum 1 to k
-    int sum(int k){
-        int s = 0;
-        while(k >= 1){
-            s += tree[k];
-            k -= (k & -k);
-        }
-        return s;
-    }
+   }
+   void update(int val, int ind){
+       ind = ind + 1;
+       while(ind <= size){
+           tree[ind] += val;
+           ind += ind & (-ind);
+        //   cout << "Current index: " << ind << "\n";
+       }
+   }
+   int sum(int ind){
+       int total = 0;
+       ind = ind + 1;
+       while(ind > 0){
+           total += tree[ind];
+           ind -= ind & (-ind);
+       }
+       return total;
+   }
 };
