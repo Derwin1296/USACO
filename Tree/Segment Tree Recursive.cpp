@@ -41,7 +41,3 @@ int query(int index, int l_l, int l_r, int q_l, int q_r){
         return left + right;
     }
 }
-
-int main()
-{
-}
