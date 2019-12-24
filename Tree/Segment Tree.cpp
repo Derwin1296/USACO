@@ -1,3 +1,4 @@
+// Segment tree supporting 1D queries and updates, if non-perfect binary tree, pad with zeroes to make perfect
 void build(){
     for(int i = n - 1; i >= 0; i--){
         tree[i] = tree[i << 1] + tree[i << 1 | 1];
