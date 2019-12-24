@@ -1,0 +1,15 @@
+// Calculates coordinates of intersection of rectangles
+pair<pi, pi> inter(pair<pi, pi> p1, pair<pi, pi> p2){
+    int x_min = max(p1.f.f, p2.f.f);
+    int x_max = min(p1.s.f, p2.s.f);
+    int y_min = max(p1.f.s, p2.f.s);
+    int y_max = min(p1.s.s, p2.s.s);
+    // cout << "(" << x_min << ", " << y_min << ", " << x_max << ", " << y_max << ")" << "\n";
+
+    if(y_max <= y_min || x_max <= x_min){
+        return {{0, 0}, {0, 0}};
+    }
+    else{
+        return {{x_min, y_min}, {x_max, y_max}};
+    }
+}
