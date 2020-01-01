@@ -58,7 +58,7 @@ int query(int node, int start, int end, int l, int r){
 
 void updateRange(int node, int start, int end, int l, int r, int val){
     // Out of range:
-    if(l > end || r < start){
+    if(l > end || r < start || end < start){
         return;
     }
     // Current node is leaf node
