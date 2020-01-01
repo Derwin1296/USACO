@@ -1,4 +1,3 @@
-
 int segTree[4 * 100001];
 
 void construct(int node, int start, int end, int arr[]){
@@ -15,31 +14,44 @@ void construct(int node, int start, int end, int arr[]){
     }
 }
 
-int update(int node, int ll, int rl, int q, int val){
-    // 
-    if (rl < q || ll > q) return seg_tree[node];
-    if (q == ll && q == rl) seg_tree[node] = val;
-    else {
-        int left = update(2*node+1, ll, (ll+rl)/2, q, val);
-        int right = update(2*node+2, (ll+rl)/2 + 1, rl, q, val);
-        st[node] = left + right;
+void update(int node, int start, int end, int index, int val, int arr[]){
+    // If leaf node, update value
+    if(start == end){
+        // cout << "Current index updating";
+        arr[index] += val;
+        segTree[node] += val;
     }
-    return st[node];
+    // Otherwise, determine if index lies in left or right child
+    else{
+        int mid = (start + end) / 2;
+        // If on left child, update left
+        if(start <= index && index <= mid){
+            cout << "Updating left! \n";
+            update(2 * node, start, mid, index, val, arr);
+        }
+        // Otherwise, update right
+        else{
+            cout << "Updating right! \n";
+            update(2 * node + 1, mid + 1, end, index, val, arr);
+        }
+        segTree[node] = segTree[2 * node] + segTree[2 * node + 1];
+    }
 }
 
-int query(int index, int l_l, int l_r, int q_l, int q_r){
-    // Total overlap, return node value
-    if(q_l <= l_l && q_r >= l_r){
-        return seg_tree[index];
+int query(int node, int start, int end, int l, int r){
+    // Node range completely within query range
+    if(l <= start && end <= r){
+        return segTree[node];
     }
-    // Out of range: return dummy value
-    else if(q_l > l_r || q_r < l_l){
+    // Query range completely outside node range
+    else if(l > end || r < start){
         return 0;
     }
-    // Partial overlap, return combination of both children
     else{
-        int left = query(2 * index + 1, l_l, (l_l + l_r) / 2, q_l, q_r);
-        int right = query(2 * index + 2, (l_l + l_r) / 2 + 1, l_r, q_l, q_r);
-        return left + right;
+        int mid = (start + end) / 2;
+        // Query on left and right child
+        int l_q = query(2 * node, start, mid, l, r);
+        int r_q = query(2 * node + 1, mid + 1, end, l, r);
+        return l_q + r_q;
     }
 }
