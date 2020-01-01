@@ -55,3 +55,22 @@ int query(int node, int start, int end, int l, int r){
         return l_q + r_q;
     }
 }
+
+void updateRange(int node, int start, int end, int l, int r, int val){
+    // Out of range:
+    if(l > end || r < start){
+        return;
+    }
+    // Current node is leaf node
+    else if(start == end){
+        segTree[node] += val;
+        return;
+    }
+    // Recursion on children, update tree[node]
+    else{
+        int mid = (start + end) / 2;
+        updateRange(2 * node, start, mid, l, r, val);
+        updateRange(2 * node + 1, mid + 1, end, l, r, val);
+        segTree[node] = segTree[2 * node] + segTree[2 * node + 1];
+    }
+}
