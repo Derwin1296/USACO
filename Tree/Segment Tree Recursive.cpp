@@ -1,16 +1,18 @@
-ll a[MX];
-int seg_tree[4 * MX];
 
-int construct(int index, int left_interval, int right_interval){
-    if(left_interval == right_interval){
-        seg_tree[index] = a[left_interval];
+int segTree[4 * 100001];
+
+void construct(int node, int start, int end, int arr[]){
+    // Leaf node
+    if(start == end){
+        segTree[node] = arr[start];
     }
+    // Construct left and right child of tree
     else{
-        int left = construct(2 * index + 1, left_interval, (left_interval + right_interval) / 2);
-        int right = construct(2 * index + 2, (left_interval + right_interval) / 2 + 1, right_interval);
-        seg_tree[index] = left + right;
+        int mid = (start + end) / 2;
+        construct(2 * node, start, mid, arr);
+        construct(2 * node + 1, mid + 1, end, arr);
+        segTree[node] = segTree[2 * node] + segTree[2 * node + 1];
     }
-    return seg_tree[index];
 }
 
 int update(int node, int ll, int rl, int q, int val){
