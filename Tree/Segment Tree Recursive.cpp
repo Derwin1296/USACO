@@ -103,7 +103,7 @@ void updateRangeLazy(int node, int start, int end, int l, int r, int val){
         return;
     }
     int mid = (start + end) / 2;
-     updateRange(2 * node, start, mid, l, r, val);
-     updateRange(2 * node + 1, mid + 1, end, l, r, val);
-     segTree[node] = segTree[2 * node] + segTree[2 * node + 1];
+    updateRangeLazy(2 * node, start, mid, l, r, val);
+    updateRangeLazy(2 * node + 1, mid + 1, end, l, r, val);
+    segTree[node] = segTree[2 * node] + segTree[2 * node + 1];
 }
