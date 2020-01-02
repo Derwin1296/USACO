@@ -107,3 +107,26 @@ void updateRangeLazy(int node, int start, int end, int l, int r, int val){
     updateRangeLazy(2 * node + 1, mid + 1, end, l, r, val);
     segTree[node] = segTree[2 * node] + segTree[2 * node + 1];
 }
+
+int queryRange(int node, int start, int end, int l, int r)
+{
+    if(start > end || start > r or end < l)
+        return 0;         // Out of range
+    if(lazy[node] != 0)
+    {
+        // This node needs to be updated
+        segTree[node] += (end - start + 1) * lazy[node];            // Update it
+        if(start != end)
+        {
+            lazy[node*2] += lazy[node];         // Mark child as lazy
+            lazy[node*2+1] += lazy[node];    // Mark child as lazy
+        }
+        lazy[node] = 0;                 // Reset it
+    }
+    if(start >= l && end <= r)             // Current segment is totally within range [l, r]
+        return tree[node];
+    int mid = (start + end) / 2;
+    int leftQuery = queryRange(node*2, start, mid, l, r);         // Query left child
+    int rightQuery = queryRange(node*2 + 1, mid + 1, end, l, r); // Query right child
+    return leftQuery + rightQuery;
+}
